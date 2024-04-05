@@ -1,0 +1,120 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <style>
+        .pragmatic-data-container {
+            display: flex;
+            align-items: top;
+            justify-content: center;
+            box-sizing: border-box;
+            font-family: 'Noto Sans Georgian';
+
+        }
+        .pragmatic-data-container.small .pragmatic-data.power-data {
+            display: block;
+            width: 233px;
+            height: 118px;
+        }
+        .pragmatic-data-container.small .pragmatic-data span {
+            width: 212px;
+            height: 58px;
+            margin: 19px auto;
+            font-size: 29px;
+        }
+        .pragmatic-data {
+            width: 203px;
+            height: 70px;
+            background-image: url(https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/836738d2-f79c-48a2-9869-6f0821409b02/jackpot-minor.png?auto=format%2Ccompress);
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-position: top center;
+            margin: 0;
+        }
+        .pragmatic-data.major-data {
+            background-image: url(https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/fd2561e1-39ca-4f57-9027-64a80935c553/jackpot-major.png?auto=format%2Ccompress);
+            margin: 0;
+        }
+        .pragmatic-data.minor-data {
+            background-image: url(https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/6cafb0de-038b-475f-babe-e47ae8a98633/jackpot-mega.png?auto=format%2Ccompress);
+            margin: 0;
+        }
+        .pragmatic-data.mini-data {
+            background-image: url(https://images.takeshape.io/5da2b4d5-59f6-412a-82c3-f6a272b532be/dev/1e2014f5-b268-4750-8a98-5cc4dec09a2e/jackpot-grand.png?auto=format%2Ccompress);
+            margin: 0;
+        }
+        .pragmatic-data.mega-data,
+        .pragmatic-data.grand-data {
+            display:none;
+        }
+        .pragmatic-data span {
+            display: block;
+            width: 185px;
+            height: 55px;
+            margin: 7px auto;
+            overflow: hidden;
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            line-height: 55px;
+            text-align: start;
+            margin-left: 80px;
+        }
+        @media (max-width: 820px) {
+          .pragmatic-data-container {
+            display: grid;
+            grid-template-columns: repeat(2, 0fr);
+            grid-template-rows: repeat(2, 0fr);
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+            justify-items: center;
+        }
+        .pragmatic-data {
+            width: 203px;
+            height: 70px;
+        }
+        }
+        @media (max-width: 400px) {
+          .pragmatic-data-container {
+            grid-template-columns: repeat(1, 0fr);
+            grid-template-rows: repeat(1, 0fr);
+        }
+      }
+        </style>
+    <title>
+
+</title></head>
+    <body>
+        <div class="pragmatic-data-container">
+            <div class="pragmatic-data power-data">
+                <span class="number" id="number1">0</span>
+            </div>
+            <div class="pragmatic-data major-data">
+                <span class="number" id="number2">0</span>
+            </div>
+            <div class="pragmatic-data minor-data">
+                <span class="number" id="number3">0</span>
+            </div>
+            <div class="pragmatic-data mini-data">
+                <span class="number" id="number4">0</span>
+            </div>
+        </div> 
+        <script>
+    function fetchData() {
+        fetch('https://api.prerelease-env.biz/IntegrationService/v3/JackpotFeeds/extended/jackpots/?login=samsara_ambassadori&hash=b5056938c45870e2f3b44820fca7889b')
+            .then(response => response.json())
+            .then(data => {
+                const numbers = data.jackpots[0].tiers.map(tier => (Math.round(tier.amount * 100) / 100).toFixed(2));
+                const numberElements = document.querySelectorAll('.number');
+                numberElements.forEach((element, index) => {
+                    element.textContent = `${numbers[index]}`;
+                });
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
+    }
+
+    fetchData();
+
+    setInterval(fetchData, 10000);
+        </script>
+    </body>
+</html>
